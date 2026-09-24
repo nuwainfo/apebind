@@ -161,6 +161,10 @@ A real project built with APEBind is [ffl-python](https://github.com/nuwainfo/ff
 
 That project is useful as a real-world reference, but it is not part of APEBind's design vocabulary. APEBind itself only understands executable grammar, lifecycle, results, events, and language projection. The examples below therefore use the repository fixture or other neutral APEs.
 
+## Demo case
+
+[LangZoo.js](https://github.com/bear0330/lang-zoo-js) is a deliberately playful APEBind demo. It uses the Node.js backend to package several portable language runtimes as independently installable npm packages, then runs the same small computation in each one. It demonstrates the generator and distribution model; it is not a production reference application.
+
 ## Typical workflow
 
 The repository includes `tests/fixtures/ape_fixture.com`, a small APE CLI used by the test suite. Build it first when necessary:
