@@ -1,10 +1,8 @@
-# APEBind
+# APEBind — Turn Actual Portable Executable CLI executables into self-contained, language-native packages
 
-**Turn Actually Portable Executable (APE) command-line programs into generated libraries.**
+APEBind treats an [Actually Portable Executable (APE)](https://github.com/jart/cosmopolitan)'s command-line surface as an **executable ABI**. It recursively inspects `--help`, produces a human-editable neutral schema, and generates a language package that bundles the same APE and invokes it through a subprocess boundary.
 
-APEBind treats an APE's command-line surface as an **executable ABI**. It recursively inspects `--help`, produces a human-editable neutral schema, and generates a language package that bundles the same APE and invokes it through a subprocess boundary.
-
-v0.4 deliberately supports **APE only**. Generic ELF/Mach-O/PE binaries are conceptually possible later, but their OS/architecture/libc/loader/dependency distribution matrix is explicitly outside the current scope.
+Install a generated package through its native package manager, then use the bundled CLI through an API that follows the target language's conventions. One APE and one reviewed CLI schema can produce independently distributed Python, Node.js, and Java packages.
 
 ## Repository layout
 
