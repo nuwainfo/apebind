@@ -1,0 +1,54 @@
+schema_version: 1
+ape:
+  name: php
+  binary: php
+commands:
+- path: []
+  summary: -a               Run as interactive shell (requires readline extension)
+  positionals:
+  - name: file
+    api_name: file
+    value_type: path
+    required: true
+    multiple: false
+    help: ''
+  - name: php
+    api_name: php
+    value_type: string
+    required: true
+    multiple: false
+    help: ''
+  - name: code
+    api_name: code
+    value_type: string
+    required: true
+    multiple: false
+    help: ''
+  - name: addr
+    api_name: addr
+    value_type: string
+    required: true
+    multiple: false
+    help: ''
+  - name: router
+    api_name: router
+    value_type: string
+    required: false
+    multiple: false
+    help: ''
+  options: []
+operations:
+- name: run
+  command: []
+  execution: oneshot
+  result:
+    format: command
+    field: null
+    option_flag: null
+    ready_timeout_seconds: null
+    strip: true
+  process:
+    timeout_seconds: null
+  events: null
+runtime:
+  env_unset: []

@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+.coverage
+htmlcov/
+cosmocc/
+ape/*
+!ape/LICENSES/
+!ape/LICENSES/**
+!ape/THIRD_PARTY_NOTICES.md
+tests/fixtures/ape_fixture.com

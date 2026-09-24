@@ -1,0 +1,73 @@
+schema_version: 1
+ape:
+  name: python-ape
+  binary: python.com
+commands:
+  - path: []
+    summary: Run the bundled Python interpreter.
+    positionals:
+      - name: file
+        api_name: file
+        value_type: path
+        required: false
+        multiple: false
+        help: Python script file to execute.
+      - name: arg
+        api_name: args
+        value_type: string
+        required: false
+        multiple: true
+        help: Arguments exposed to the Python program through sys.argv[1:].
+    options:
+      - flags: [-c]
+        api_name: code
+        value_type: string
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Execute Python source code passed as a string.
+      - flags: [-m]
+        api_name: module
+        value_type: string
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Execute a library module as a script.
+      - flags: [-I]
+        api_name: isolated
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Run Python in isolated mode.
+      - flags: [-u]
+        api_name: unbuffered
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Force unbuffered stdout and stderr.
+      - flags: [-V, --version]
+        api_name: version
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Print the Python version and exit.
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      strip: true
+runtime:
+  env_unset:
+    - PYTHONHOME
+    - PYTHONPATH
+    - PYTHONSTARTUP

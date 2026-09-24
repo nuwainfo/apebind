@@ -1,0 +1,49 @@
+usage: FFL.pyc keygen [-h] [--version] [--cli] [--log-level LEVEL_OR_FILE]
+                      [--proxy PROXY] [--hook WEBHOOK_URL]
+                      [--enable-reporting] [--name NAME] [--share]
+                      [--json JSON_FILE] [--recipient-auth MODE]
+                      [--pickup-code CODE] [--recipient-public-key FILE]
+                      [--recipient-email EMAILS]
+                      [--recipient-otp-api-base URL]
+
+options:
+  -h, --help            show this help message and exit
+  --version             Show version information and enabled addons
+  --cli                 Run in CLI mode without GUI (optional)
+  --log-level LEVEL_OR_FILE
+                        Set logging level (DEBUG, INFO, WARNING, ERROR) or
+                        path to logging config JSON file (default: WARNING)
+  --proxy PROXY         Proxy server for all outbound connections. Formats:
+                        [user:pass@]host:port (defaults to SOCKS5),
+                        socks5[h]://[user:pass@]host:port,
+                        http[s]://[user:pass@]host:port. SOCKS5 proxies work
+                        for both tunnel and HTTP requests. HTTP proxies only
+                        work for HTTP requests (not tunnel)
+  --hook WEBHOOK_URL    Webhook URL for forwarding events to parent process or
+                        external service. Format:
+                        http://[user:pass@]host:port/path (e.g.,
+                        http://app:token@127.0.0.1:12345/events). Auth
+                        credentials are optional but recommended.
+  --enable-reporting    Enable error reporting to FastFileLink server for
+                        exception diagnostics
+  --name NAME           Base name for keypair files (default: recipient →
+                        recipient.fflpub + recipient.fflkey)
+  --share               Share the generated private key immediately after
+                        generation (private key can only be downloaded once,
+                        then auto-deleted; recommended: add --recipient-auth
+                        pickup or --recipient-auth pubkey)
+  --json JSON_FILE      Output link and settings to a JSON file (use with
+                        --share)
+  --recipient-auth MODE
+                        Enable recipient verification before download
+  --pickup-code CODE    Custom 6-digit pickup code for recipient verification
+  --recipient-public-key FILE
+                        Recipient public key (.fflpub) file path for pubkey
+                        verification
+  --recipient-email EMAILS
+                        Recipient email address(es) for email verification
+                        (comma-separated)
+  --recipient-otp-api-base URL
+                        Base URL for OTP email API (e.g.
+                        https://myserver.com/api). Required for --recipient-
+                        auth email

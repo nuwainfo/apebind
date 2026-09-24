@@ -1,0 +1,71 @@
+schema_version: 1
+ape:
+  name: janet-ape
+  binary: janet.com
+commands:
+  - path: []
+    summary: Run the bundled Janet interpreter.
+    positionals:
+      - name: script
+        api_name: script
+        value_type: path
+        required: false
+        multiple: false
+        help: Janet script file to execute.
+      - name: arg
+        api_name: args
+        value_type: string
+        required: false
+        multiple: true
+        help: Arguments passed to the Janet script.
+    options:
+      - flags: [-e]
+        api_name: code
+        value_type: string
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Execute Janet source code passed as a string.
+      - flags: [-v]
+        api_name: version
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Print the Janet version and exit.
+      - flags: [-q]
+        api_name: quiet
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Hide the Janet REPL logo.
+      - flags: [-R]
+        api_name: ignore_profile
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Ignore JANET_PROFILE.
+      - flags: [-n]
+        api_name: no_color
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Disable ANSI color output.
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      strip: true
+runtime:
+  env_unset:
+    - JANET_PROFILE

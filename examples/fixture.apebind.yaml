@@ -1,0 +1,92 @@
+schema_version: 1
+ape:
+  name: fixturebind
+  binary: fixture.com
+commands:
+  - path: []
+    summary: APEBind fixture CLI.
+    positionals: []
+    options:
+      - flags: [--verbose]
+        api_name: verbose
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Enable verbose output.
+  - path: [echo]
+    summary: Echo text.
+    positionals:
+      - name: text
+        api_name: text
+        value_type: string
+        required: true
+        multiple: true
+        help: Text values to echo.
+    options:
+      - flags: [--upper]
+        api_name: upper
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Uppercase the text.
+      - flags: [--repeat]
+        api_name: repeat
+        value_type: integer
+        required: false
+        multiple: false
+        choices: []
+        help: Repeat count.
+  - path: [json]
+    summary: Emit JSON.
+    positionals: []
+    options:
+      - flags: [--value]
+        api_name: value
+        value_type: string
+        required: false
+        multiple: false
+        choices: []
+        help: Value to include.
+  - path: [serve]
+    summary: Run until terminated.
+    positionals: []
+    options:
+      - flags: [--json]
+        api_name: json
+        value_type: path
+        required: true
+        multiple: false
+        choices: []
+        help: Write startup JSON to this file.
+      - flags: [--message]
+        api_name: message
+        value_type: string
+        required: false
+        multiple: false
+        choices: []
+        help: Message included in startup JSON.
+operations:
+  - name: echo
+    command: [echo]
+    execution: oneshot
+    result:
+      format: text
+      strip: true
+  - name: json_value
+    command: [json]
+    execution: oneshot
+    result:
+      format: json
+      field: payload.value
+      strip: true
+  - name: serve
+    command: [serve]
+    execution: persistent
+    result:
+      format: json_file
+      option_flag: --json
+      field: link
+      ready_timeout_seconds: 5
+      strip: true

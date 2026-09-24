@@ -1,0 +1,287 @@
+schema_version: 1
+ape:
+  name: redbean-ape
+  binary: redbean.com
+commands:
+  - path: []
+    summary: Portable redbean web application server.
+    positionals: []
+    options:
+      - flags: [-h, '-?']
+        api_name: help
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Show help.
+      - flags: [-d]
+        api_name: daemonize
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Daemonize.
+      - flags: [-u]
+        api_name: uniprocess
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Run as a single process.
+      - flags: [-z]
+        api_name: print_port
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Print the listening port.
+      - flags: [-m]
+        api_name: log_messages
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Log HTTP messages.
+      - flags: [-i]
+        api_name: interpreter
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Enable interpreter mode.
+      - flags: [-b]
+        api_name: log_bodies
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Log message bodies.
+      - flags: [-a]
+        api_name: log_resource_usage
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Log resource usage.
+      - flags: [-g]
+        api_name: log_handler_latency
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Log handler latency.
+      - flags: [-E]
+        api_name: public_crash_reports
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Show crash reports to public IPs.
+      - flags: [-j]
+        api_name: ssl_client_verify
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Enable SSL client verification.
+      - flags: [-k]
+        api_name: disable_ssl_fetch_verify
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Disable SSL fetch verification.
+      - flags: [-B]
+        api_name: strong_crypto
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Only use stronger cryptography.
+      - flags: [-X]
+        api_name: disable_tls
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Disable TLS server and client support.
+      - flags: [-J]
+        api_name: disable_plain_http
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Disable non-TLS server and client support.
+      - flags: ['-%']
+        api_name: fast_startup
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Skip RSA key generation to hasten startup.
+      - flags: [-e]
+        api_name: lua_code
+        value_type: string
+        required: false
+        multiple: true
+        choices: []
+        help: Evaluate Lua code at startup.
+      - flags: [-F]
+        api_name: lua_file
+        value_type: path
+        required: false
+        multiple: true
+        choices: []
+        help: Evaluate Lua code from a file.
+      - flags: [-H]
+        api_name: header
+        value_type: string
+        required: false
+        multiple: true
+        choices: []
+        help: Set a global HTTP header.
+      - flags: [-D]
+        api_name: overlay
+        value_type: path
+        required: false
+        multiple: true
+        choices: []
+        help: Overlay assets from a local directory.
+      - flags: [-r]
+        api_name: redirect
+        value_type: string
+        required: false
+        multiple: true
+        choices: []
+        help: Add a redirect mapping.
+      - flags: [-R]
+        api_name: rewrite
+        value_type: string
+        required: false
+        multiple: true
+        choices: []
+        help: Add a rewrite mapping.
+      - flags: [-K]
+        api_name: tls_private_key
+        value_type: path
+        required: false
+        multiple: true
+        choices: []
+        help: Add a TLS private key path.
+      - flags: [-C]
+        api_name: tls_certificate
+        value_type: path
+        required: false
+        multiple: true
+        choices: []
+        help: Add a TLS certificate path.
+      - flags: [-A]
+        api_name: asset
+        value_type: path
+        required: false
+        multiple: true
+        choices: []
+        help: Add an asset path recursively.
+      - flags: [-M]
+        api_name: max_message_payload
+        value_type: integer
+        required: false
+        multiple: false
+        choices: []
+        help: Tune the maximum message payload size.
+      - flags: [-t]
+        api_name: timeout
+        value_type: integer
+        required: false
+        multiple: false
+        choices: []
+        help: Configure timeout milliseconds or keepalive seconds when negative.
+      - flags: [-p]
+        api_name: port
+        value_type: integer
+        required: false
+        multiple: true
+        choices: []
+        help: Listen on a port.
+      - flags: [-l]
+        api_name: listen_address
+        value_type: string
+        required: false
+        multiple: true
+        choices: []
+        help: Listen on an address.
+      - flags: [-c]
+        api_name: cache_control
+        value_type: string
+        required: false
+        multiple: false
+        choices: []
+        help: Configure static Cache-Control.
+      - flags: [-W]
+        api_name: tty
+        value_type: path
+        required: false
+        multiple: false
+        choices: []
+        help: Use a TTY path to monitor memory pages.
+      - flags: [-L]
+        api_name: log_file
+        value_type: path
+        required: false
+        multiple: false
+        choices: []
+        help: Set the log file location.
+      - flags: [-P]
+        api_name: pid_file
+        value_type: path
+        required: false
+        multiple: false
+        choices: []
+        help: Set the PID file location.
+      - flags: [-U]
+        api_name: user_id
+        value_type: integer
+        required: false
+        multiple: false
+        choices: []
+        help: Set the daemon user ID.
+      - flags: [-G]
+        api_name: group_id
+        value_type: integer
+        required: false
+        multiple: false
+        choices: []
+        help: Set the daemon group ID.
+      - flags: [-w]
+        api_name: browser
+        value_type: path
+        required: false
+        multiple: false
+        choices: []
+        help: Launch a browser on startup.
+      - flags: [--strace]
+        api_name: strace
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Enable system call tracing.
+      - flags: [--ftrace]
+        api_name: ftrace
+        value_type: boolean
+        required: false
+        multiple: false
+        choices: []
+        help: Enable function call tracing.
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      field: null
+      option_flag: null
+      ready_timeout_seconds: null
+      strip: true
+runtime:
+  env_unset: []

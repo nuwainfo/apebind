@@ -1,0 +1,123 @@
+usage: FFL.pyc share [-h] [--version] [--cli] [--log-level LEVEL_OR_FILE]
+                     [--proxy PROXY] [--hook WEBHOOK_URL] [--enable-reporting]
+                     [--name FILENAME] [--exclude PATTERNS] [--json JSON_FILE]
+                     [--upload [{unavailable}]] [--resume]
+                     [--pause PERCENTAGE] [--yes] [--legacy-link URL]
+                     [--max-downloads MAXDOWNLOADS] [--timeout TIMEOUT]
+                     [--port PORT] [--auth-user USERNAME]
+                     [--auth-password PASSWORD] [--recipient-auth MODE]
+                     [--pickup-code CODE] [--recipient-public-key FILE]
+                     [--recipient-email EMAILS] [--recipient-otp-api-base URL]
+                     [--force-relay] [--e2ee] [--invite] [--qr [FILE]]
+                     [--disable-clipboard] [--vfs] [--stdin-cache {on,off}]
+                     [--background] [--foreground] [--alias ALIAS]
+                     [--receipt [EMAIL[,EMAIL...]]]
+                     [--receipt-confirm [MESSAGE]]
+                     [--preferred-tunnel {default}]
+                     [FILE_OR_FOLDER ...]
+
+options:
+  -h, --help            show this help message and exit
+  --version             Show version information and enabled addons
+  --cli                 Run in CLI mode without GUI (optional)
+  --log-level LEVEL_OR_FILE
+                        Set logging level (DEBUG, INFO, WARNING, ERROR) or
+                        path to logging config JSON file (default: WARNING)
+  --proxy PROXY         Proxy server for all outbound connections. Formats:
+                        [user:pass@]host:port (defaults to SOCKS5),
+                        socks5[h]://[user:pass@]host:port,
+                        http[s]://[user:pass@]host:port. SOCKS5 proxies work
+                        for both tunnel and HTTP requests. HTTP proxies only
+                        work for HTTP requests (not tunnel)
+  --hook WEBHOOK_URL    Webhook URL for forwarding events to parent process or
+                        external service. Format:
+                        http://[user:pass@]host:port/path (e.g.,
+                        http://app:token@127.0.0.1:12345/events). Auth
+                        credentials are optional but recommended.
+  --enable-reporting    Enable error reporting to FastFileLink server for
+                        exception diagnostics
+
+share:
+  FILE_OR_FOLDER        File(s) or folder to share. Use '-' for stdin,
+                        '@filelist.txt' to read paths from a file. Multiple
+                        files can be specified: file1 file2 file3
+  --name FILENAME, -n FILENAME
+                        Specify custom download filename (default: original
+                        filename for files, folder.zip for folders, stdin-
+                        YYYYMMDD-HHMMSS.bin for stdin)
+  --exclude PATTERNS    Comma-separated patterns to exclude files/folders by
+                        name (e.g. '*.log,.svn,__pycache__'). Prefix with
+                        're:' for regex (e.g. 're:\.tmp$'). Applies at any
+                        depth.
+  --json JSON_FILE      Output link and settings to a JSON file
+  --upload [{unavailable}]
+                        Upload file to FastFileLink server to share it (Share
+                        duration after upload). Default: 6 hours
+  --resume              Resume a previously interrupted upload (requires
+                        previous upload session to exist)
+  --pause PERCENTAGE    Pause upload at specified percentage (1-99, requires
+                        --upload)
+  --yes                 Automatically answer yes to upload confirmation
+                        prompts
+  --legacy-link URL     Legacy P2P share link to recover after this server
+                        upload completes
+  --max-downloads MAXDOWNLOADS
+                        Maximum number of downloads before the server
+                        automatically shuts down (P2P mode only). 0 means
+                        unlimited.
+  --timeout TIMEOUT     Timeout in seconds before the server automatically
+                        shuts down (P2P mode only). 0 means no timeout.
+  --port PORT           Port number for local server (1024-65535, default:
+                        auto-detect available port)
+  --auth-user USERNAME  Username for HTTP Basic Authentication (default:
+                        'ffl')
+  --auth-password PASSWORD
+                        Password for HTTP Basic Authentication (enables auth
+                        protection)
+  --recipient-auth MODE
+                        Enable recipient verification before download
+  --pickup-code CODE    Custom 6-digit pickup code for recipient verification
+  --recipient-public-key FILE
+                        Recipient public key (.fflpub) file path for pubkey
+                        verification
+  --recipient-email EMAILS
+                        Recipient email address(es) for email verification
+                        (comma-separated)
+  --recipient-otp-api-base URL
+                        Base URL for OTP email API (e.g.
+                        https://myserver.com/api). Required for --recipient-
+                        auth email
+  --force-relay         Force relayed P2P mode, disable direct WebRTC
+                        connections (can be overridden by ?webrtc=on URL
+                        parameter)
+  --e2ee                Enable end-to-end encryption for file sharing (both
+                        HTTP and WebRTC)
+  --invite              Open invite page in browser with the sharing link
+  --qr [FILE]           Display QR code in terminal (default) or save to FILE
+                        (e.g., qr.png)
+  --disable-clipboard   Disable automatically copying the share link to the
+                        clipboard (default: enabled in CLI mode, disabled in
+                        GUI mode)
+  --vfs                 Start VFS server and provide vfs:// URI instead of
+                        HTTPS link (P2P mode only, works with --port)
+  --stdin-cache {on,off}
+                        Enable or disable stdin caching ('off' means a second
+                        read raises an error)
+  --background          Submit share to background daemon (auto-starts daemon
+                        if needed)
+  --foreground          Run share in foreground even if a daemon is running
+  --alias ALIAS         Use custom alias as UID for sharing link (e.g.,
+                        --alias cool creates link with 'cool' as UID)
+  --receipt [EMAIL[,EMAIL...]]
+                        Send email receipt notification when download
+                        completes. Omit value to use your account email
+                        (requires non-free account). Accepts one or more
+                        addresses separated by commas.
+  --receipt-confirm [MESSAGE]
+                        Show a confirmation dialog to the receiver after
+                        download, asking them to acknowledge receipt.
+                        Confirmation reply is sent to --receipt email(s) or
+                        your account email (requires non-free account).
+  --preferred-tunnel {default}
+                        Set preferred tunnel for future runs. Available:
+                        default

@@ -1,0 +1,80 @@
+schema_version: 1
+ape:
+  name: php-ape
+  binary: php.com
+commands:
+  - path: []
+    summary: Run the bundled PHP CLI runtime.
+    positionals:
+      - name: file
+        api_name: file
+        value_type: path
+        required: false
+        multiple: false
+        help: PHP script file to execute.
+      - name: arg
+        api_name: args
+        value_type: string
+        required: false
+        multiple: true
+        help: Arguments passed to the PHP script.
+    options:
+      - flags: [-r]
+        api_name: code
+        value_type: string
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Execute PHP code without script tags.
+      - flags: [-n]
+        api_name: no_configuration
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Do not load php.ini configuration files.
+      - flags: [-d]
+        api_name: ini
+        value_type: string
+        required: false
+        multiple: true
+        value_optional: false
+        choices: []
+        help: Define an INI setting. May be repeated.
+      - flags: [-l]
+        api_name: lint
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Check syntax only.
+      - flags: [-v]
+        api_name: version
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Print PHP version information.
+      - flags: [-m]
+        api_name: modules
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: List compiled-in modules.
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      strip: true
+runtime:
+  env_unset:
+    - PHPRC
+    - PHP_INI_SCAN_DIR

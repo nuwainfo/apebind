@@ -1,0 +1,36 @@
+schema_version: 1
+ape:
+  name: python
+  binary: python
+commands:
+- path: []
+  summary: ''
+  positionals:
+  - name: file
+    api_name: file
+    value_type: path
+    required: true
+    multiple: false
+    help: ''
+  - name: arg
+    api_name: arg
+    value_type: string
+    required: false
+    multiple: false
+    help: ''
+  options: []
+operations:
+- name: run
+  command: []
+  execution: oneshot
+  result:
+    format: command
+    field: null
+    option_flag: null
+    ready_timeout_seconds: null
+    strip: true
+  process:
+    timeout_seconds: null
+  events: null
+runtime:
+  env_unset: []

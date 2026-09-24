@@ -1,0 +1,31 @@
+schema_version: 1
+ape:
+  name: tcl-ape
+  binary: tclsh.com
+commands:
+  - path: []
+    summary: Run a Tcl script with the bundled Tcl shell.
+    positionals:
+      - name: file
+        api_name: file
+        value_type: path
+        required: true
+        multiple: false
+        help: Tcl script file to execute.
+      - name: arg
+        api_name: args
+        value_type: string
+        required: false
+        multiple: true
+        help: Arguments exposed to the Tcl script through argv.
+    options: []
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      strip: true
+runtime:
+  env_unset:
+    - TCL_LIBRARY

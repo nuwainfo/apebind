@@ -1,0 +1,24 @@
+schema_version: 1
+ape:
+  name: redbean
+  binary: redbean.com
+commands:
+- path: []
+  summary: ''
+  positionals: []
+  options: []
+operations:
+- name: run
+  command: []
+  execution: oneshot
+  result:
+    format: command
+    field: null
+    option_flag: null
+    ready_timeout_seconds: null
+    strip: true
+  process:
+    timeout_seconds: null
+  events: null
+runtime:
+  env_unset: []

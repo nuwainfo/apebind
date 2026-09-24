@@ -1,0 +1,710 @@
+schema_version: 1
+ape:
+  name: ffl
+  binary: ffl.com
+commands:
+- path: []
+  summary: ''
+  positionals: []
+  options: []
+- path:
+  - share
+  summary: ''
+  positionals:
+  - name: FILE_OR_FOLDER
+    api_name: file_or_folder
+    value_type: path
+    required: false
+    multiple: true
+    help: 'File(s) or folder to share. Use ''-'' for stdin, ''@filelist.txt'' to read
+      paths from a file. Multiple files can be specified: file1 file2 file3'
+  options:
+  - flags:
+    - --version
+    api_name: version
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Show version information and enabled addons
+  - flags:
+    - --cli
+    api_name: cli
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Run in CLI mode without GUI (optional)
+  - flags:
+    - --log-level
+    api_name: log_level
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Set logging level (DEBUG, INFO, WARNING, ERROR) or path to logging config
+      JSON file (default: WARNING)'
+  - flags:
+    - --proxy
+    api_name: proxy
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Proxy server for all outbound connections. Formats: [user:pass@]host:port
+      (defaults to SOCKS5), socks5[h]://[user:pass@]host:port, http[s]://[user:pass@]host:port.
+      SOCKS5 proxies work for both tunnel and HTTP requests. HTTP proxies only work
+      for HTTP requests (not tunnel)'
+  - flags:
+    - --hook
+    api_name: hook
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Webhook URL for forwarding events to parent process or external service.
+      Format: http://[user:pass@]host:port/path (e.g., http://app:token@127.0.0.1:12345/events).
+      Auth credentials are optional but recommended.'
+  - flags:
+    - --enable-reporting
+    api_name: enable_reporting
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Enable error reporting to FastFileLink server for exception diagnostics
+  - flags:
+    - --name
+    - -n
+    api_name: name
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Specify custom download filename (default: original filename for files,
+      folder.zip for folders, stdin- YYYYMMDD-HHMMSS.bin for stdin)'
+  - flags:
+    - --exclude
+    api_name: exclude
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Comma-separated patterns to exclude files/folders by name (e.g. '*.log,.svn,__pycache__').
+      Prefix with 're:' for regex (e.g. 're:\.tmp$'). Applies at any depth.
+  - flags:
+    - --json
+    api_name: json
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Output link and settings to a JSON file
+  - flags:
+    - --upload
+    api_name: upload
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: true
+    choices:
+    - unavailable
+    help: 'Upload file to FastFileLink server to share it (Share duration after upload).
+      Default: 6 hours'
+  - flags:
+    - --resume
+    api_name: resume
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Resume a previously interrupted upload (requires previous upload session
+      to exist)
+  - flags:
+    - --pause
+    api_name: pause
+    value_type: integer
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Pause upload at specified percentage (1-99, requires --upload)
+  - flags:
+    - --yes
+    api_name: 'yes'
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Automatically answer yes to upload confirmation prompts
+  - flags:
+    - --legacy-link
+    api_name: legacy_link
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Legacy P2P share link to recover after this server upload completes
+  - flags:
+    - --max-downloads
+    api_name: max_downloads
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Maximum number of downloads before the server automatically shuts down (P2P
+      mode only). 0 means unlimited.
+  - flags:
+    - --timeout
+    api_name: timeout
+    value_type: integer
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Timeout in seconds before the server automatically shuts down (P2P mode
+      only). 0 means no timeout.
+  - flags:
+    - --port
+    api_name: port
+    value_type: integer
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Port number for local server (1024-65535, default: auto-detect available
+      port)'
+  - flags:
+    - --auth-user
+    api_name: auth_user
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Username for HTTP Basic Authentication (default: ''ffl'')'
+  - flags:
+    - --auth-password
+    api_name: auth_password
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Password for HTTP Basic Authentication (enables auth protection)
+  - flags:
+    - --recipient-auth
+    api_name: recipient_auth
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Enable recipient verification before download
+  - flags:
+    - --pickup-code
+    api_name: pickup_code
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Custom 6-digit pickup code for recipient verification
+  - flags:
+    - --recipient-public-key
+    api_name: recipient_public_key
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Recipient public key (.fflpub) file path for pubkey verification
+  - flags:
+    - --recipient-email
+    api_name: recipient_email
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Recipient email address(es) for email verification (comma-separated)
+  - flags:
+    - --recipient-otp-api-base
+    api_name: recipient_otp_api_base
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Base URL for OTP email API (e.g. https://myserver.com/api). Required for
+      --recipient- auth email
+  - flags:
+    - --force-relay
+    api_name: force_relay
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Force relayed P2P mode, disable direct WebRTC connections (can be overridden
+      by ?webrtc=on URL parameter)
+  - flags:
+    - --e2ee
+    api_name: e2ee
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Enable end-to-end encryption for file sharing (both HTTP and WebRTC)
+  - flags:
+    - --invite
+    api_name: invite
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Open invite page in browser with the sharing link
+  - flags:
+    - --qr
+    api_name: qr
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: true
+    choices: []
+    help: Display QR code in terminal (default) or save to FILE (e.g., qr.png)
+  - flags:
+    - --disable-clipboard
+    api_name: disable_clipboard
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Disable automatically copying the share link to the clipboard (default:
+      enabled in CLI mode, disabled in GUI mode)'
+  - flags:
+    - --vfs
+    api_name: vfs
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Start VFS server and provide vfs:// URI instead of HTTPS link (P2P mode
+      only, works with --port)
+  - flags:
+    - --stdin-cache
+    api_name: stdin_cache
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices:
+    - 'on'
+    - 'off'
+    help: Enable or disable stdin caching ('off' means a second read raises an error)
+  - flags:
+    - --background
+    api_name: background
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Submit share to background daemon (auto-starts daemon if needed)
+  - flags:
+    - --foreground
+    api_name: foreground
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Run share in foreground even if a daemon is running
+  - flags:
+    - --alias
+    api_name: alias
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Use custom alias as UID for sharing link (e.g., --alias cool creates link
+      with 'cool' as UID)
+  - flags:
+    - --receipt
+    api_name: receipt
+    value_type: string
+    required: false
+    multiple: true
+    value_optional: true
+    choices: []
+    help: Send email receipt notification when download completes. Omit value to use
+      your account email (requires non-free account). Accepts one or more addresses
+      separated by commas.
+  - flags:
+    - --receipt-confirm
+    api_name: receipt_confirm
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: true
+    choices: []
+    help: Show a confirmation dialog to the receiver after download, asking them to
+      acknowledge receipt. Confirmation reply is sent to --receipt email(s) or your
+      account email (requires non-free account).
+  - flags:
+    - --preferred-tunnel
+    api_name: preferred_tunnel
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices:
+    - default
+    help: 'Set preferred tunnel for future runs. Available: default'
+- path:
+  - download
+  summary: ''
+  positionals:
+  - name: URL
+    api_name: url
+    value_type: string
+    required: true
+    multiple: false
+    help: FastFileLink URL to download from
+  options:
+  - flags:
+    - --version
+    api_name: version
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Show version information and enabled addons
+  - flags:
+    - --cli
+    api_name: cli
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Run in CLI mode without GUI (optional)
+  - flags:
+    - --log-level
+    api_name: log_level
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Set logging level (DEBUG, INFO, WARNING, ERROR) or path to logging config
+      JSON file (default: WARNING)'
+  - flags:
+    - --proxy
+    api_name: proxy
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Proxy server for all outbound connections. Formats: [user:pass@]host:port
+      (defaults to SOCKS5), socks5[h]://[user:pass@]host:port, http[s]://[user:pass@]host:port.
+      SOCKS5 proxies work for both tunnel and HTTP requests. HTTP proxies only work
+      for HTTP requests (not tunnel)'
+  - flags:
+    - --hook
+    api_name: hook
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Webhook URL for forwarding events to parent process or external service.
+      Format: http://[user:pass@]host:port/path (e.g., http://app:token@127.0.0.1:12345/events).
+      Auth credentials are optional but recommended.'
+  - flags:
+    - --enable-reporting
+    api_name: enable_reporting
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Enable error reporting to FastFileLink server for exception diagnostics
+  - flags:
+    - --output
+    - -o
+    api_name: output
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Output file path (default: use filename from server)'
+  - flags:
+    - --resume
+    api_name: resume
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Resume incomplete download (like curl -C), otherwise overwrite existing
+      file
+  - flags:
+    - --auth-user
+    api_name: auth_user
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Username for HTTP Basic Authentication (default: ''ffl'')'
+  - flags:
+    - --auth-password
+    api_name: auth_password
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Password for HTTP Basic Authentication
+  - flags:
+    - --recipient-auth
+    api_name: recipient_auth
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices:
+    - pickup
+    - pubkey
+    - pubkey+pickup
+    help: Recipient verification mode when downloading a protected file
+  - flags:
+    - --pickup-code
+    api_name: pickup_code
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Pickup code to present when downloading (use with --recipient-auth pickup
+      or pubkey+pickup)
+  - flags:
+    - --recipient-private-key
+    api_name: recipient_private_key
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Path to recipient's RSA private key file (.fflkey) for pubkey auth
+  - flags:
+    - --stdout
+    api_name: stdout
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Write downloaded content to stdout instead of a file (useful for piping,
+      e.g. | tar -xf -)
+- path:
+  - keygen
+  summary: ''
+  positionals: []
+  options:
+  - flags:
+    - --version
+    api_name: version
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Show version information and enabled addons
+  - flags:
+    - --cli
+    api_name: cli
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Run in CLI mode without GUI (optional)
+  - flags:
+    - --log-level
+    api_name: log_level
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Set logging level (DEBUG, INFO, WARNING, ERROR) or path to logging config
+      JSON file (default: WARNING)'
+  - flags:
+    - --proxy
+    api_name: proxy
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Proxy server for all outbound connections. Formats: [user:pass@]host:port
+      (defaults to SOCKS5), socks5[h]://[user:pass@]host:port, http[s]://[user:pass@]host:port.
+      SOCKS5 proxies work for both tunnel and HTTP requests. HTTP proxies only work
+      for HTTP requests (not tunnel)'
+  - flags:
+    - --hook
+    api_name: hook
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Webhook URL for forwarding events to parent process or external service.
+      Format: http://[user:pass@]host:port/path (e.g., http://app:token@127.0.0.1:12345/events).
+      Auth credentials are optional but recommended.'
+  - flags:
+    - --enable-reporting
+    api_name: enable_reporting
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Enable error reporting to FastFileLink server for exception diagnostics
+  - flags:
+    - --name
+    api_name: name
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Base name for keypair files (default: recipient → recipient.fflpub + recipient.fflkey)'
+  - flags:
+    - --share
+    api_name: share
+    value_type: boolean
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: 'Share the generated private key immediately after generation (private key
+      can only be downloaded once, then auto-deleted; recommended: add --recipient-auth
+      pickup or --recipient-auth pubkey)'
+  - flags:
+    - --json
+    api_name: json
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Output link and settings to a JSON file (use with --share)
+  - flags:
+    - --recipient-auth
+    api_name: recipient_auth
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Enable recipient verification before download
+  - flags:
+    - --pickup-code
+    api_name: pickup_code
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Custom 6-digit pickup code for recipient verification
+  - flags:
+    - --recipient-public-key
+    api_name: recipient_public_key
+    value_type: path
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Recipient public key (.fflpub) file path for pubkey verification
+  - flags:
+    - --recipient-email
+    api_name: recipient_email
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Recipient email address(es) for email verification (comma-separated)
+  - flags:
+    - --recipient-otp-api-base
+    api_name: recipient_otp_api_base
+    value_type: string
+    required: false
+    multiple: false
+    value_optional: false
+    choices: []
+    help: Base URL for OTP email API (e.g. https://myserver.com/api). Required for
+      --recipient- auth email
+operations:
+- name: share
+  command:
+  - share
+  execution: oneshot
+  result:
+    format: command
+    field: null
+    option_flag: null
+    ready_timeout_seconds: null
+    strip: true
+  process:
+    timeout_seconds: null
+- name: download
+  command:
+  - download
+  execution: oneshot
+  result:
+    format: command
+    field: null
+    option_flag: null
+    ready_timeout_seconds: null
+    strip: true
+  process:
+    timeout_seconds: null
+- name: keygen
+  command:
+  - keygen
+  execution: oneshot
+  result:
+    format: command
+    field: null
+    option_flag: null
+    ready_timeout_seconds: null
+    strip: true
+  process:
+    timeout_seconds: null
+runtime:
+  env_unset: []

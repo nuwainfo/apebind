@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apebind"
+version = "0.4.1"
+description = "Turn Actually Portable Executable CLIs into typed libraries"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "APEBind contributors"}]
+dependencies = [
+  "attrs>=23.2",
+  "cattrs>=23.2",
+  "click>=8.1",
+  "Jinja2>=3.1",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "build>=1.2", "setuptools>=68", "wheel>=0.42"]
+
+[project.scripts]
+apebind = "apebind.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+apebind = ["templates/python/*.j2", "templates/node/*.j2", "templates/java/*.j2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+  "ffl_integration: opt-in end-to-end test against an external real ffl.com APE",
+]
