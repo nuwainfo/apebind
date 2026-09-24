@@ -9,9 +9,11 @@ This is process-isolated embedding rather than an in-process FFI. The host talks
 | Runtime | Package | Example | `--help` discovery |
 |---|---|---|---|
 | Janet | `janet-ape` | evaluate Janet source | manually reviewed schema; Janet uses `-h` rather than `--help` |
+| Java | `java-ape` | run a precompiled Java class | manually reviewed schema; the bundled APE is a runtime, not a compiler |
 | Lua | `lua-ape` | evaluate Lua source | manually reviewed schema; Lua rejects `--help` |
 | PHP | `php-ape` | evaluate PHP source | raw discovery included, then corrected by review |
 | Python | `python-ape` | evaluate Python source | raw discovery included, then enriched by review |
+| Ruby | `ruby-ape` | evaluate Ruby source | manually reviewed schema; Ruby's compact short options need semantic review |
 | Tcl | `tcl-ape` | run a Tcl script file | manually authored; `tclsh --help` does not expose a CLI grammar |
 
 The PHP raw discovery is intentionally kept next to the reviewed schema. PHP prints several alternative `Usage:` forms, which demonstrates why help discovery is only a bootstrap heuristic and why the reviewed schema is the real binding contract.
@@ -27,4 +29,4 @@ apebind generate examples/languages/<runtime>/<runtime>.apebind.yaml \
 
 The input APE may have any local filename. The reviewed schemas deliberately give the bundled package binaries `.com` filenames so the generated artifacts remain directly executable on Windows as well as POSIX systems.
 
-After installing all five generated packages, `run-all.mjs` executes the same `6 * 7` computation in Janet, Lua, PHP, Python, and Tcl. Every runtime should print `42`.
+After installing all seven generated packages, `run-all.mjs` executes the same `6 * 7` computation in Janet, Java, Lua, PHP, Python, Ruby, and Tcl. Every runtime should print `42`.

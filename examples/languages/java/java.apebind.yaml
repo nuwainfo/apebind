@@ -1,0 +1,52 @@
+schema_version: 1
+ape:
+  name: java-ape
+  binary: java.com
+commands:
+  - path: []
+    summary: Run the bundled Java launcher.
+    positionals:
+      - name: mainclass
+        api_name: main_class
+        value_type: string
+        required: false
+        multiple: false
+        help: Fully qualified class containing the Java main method.
+      - name: arg
+        api_name: args
+        value_type: string
+        required: false
+        multiple: true
+        help: Arguments passed to the Java program.
+    options:
+      - flags: [-cp, -classpath, --class-path]
+        api_name: class_path
+        value_type: string
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Class search path containing the main class and its dependencies.
+      - flags: [--enable-preview]
+        api_name: enable_preview
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Enable preview language features.
+      - flags: [-version, --version]
+        api_name: version
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Print the Java version and exit.
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      strip: true

@@ -1,0 +1,60 @@
+schema_version: 1
+ape:
+  name: ruby-ape
+  binary: ruby.com
+commands:
+  - path: []
+    summary: Run the bundled Ruby interpreter.
+    positionals:
+      - name: filepath
+        api_name: file
+        value_type: path
+        required: false
+        multiple: false
+        help: Ruby script file to execute.
+      - name: arg
+        api_name: args
+        value_type: string
+        required: false
+        multiple: true
+        help: Arguments passed to the Ruby script.
+    options:
+      - flags: [-e]
+        api_name: code
+        value_type: string
+        required: false
+        multiple: true
+        value_optional: false
+        choices: []
+        help: Execute Ruby source code. May be repeated.
+      - flags: [-I]
+        api_name: load_path
+        value_type: path
+        required: false
+        multiple: true
+        value_optional: false
+        choices: []
+        help: Prepend a directory to Ruby's load path. May be repeated.
+      - flags: [-c]
+        api_name: check_syntax
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Check syntax without executing the program.
+      - flags: [-v, --version]
+        api_name: version
+        value_type: boolean
+        required: false
+        multiple: false
+        value_optional: false
+        choices: []
+        help: Print the Ruby version and exit.
+operations:
+  - name: run
+    command: []
+    execution: oneshot
+    result:
+      format: command
+      strip: true
