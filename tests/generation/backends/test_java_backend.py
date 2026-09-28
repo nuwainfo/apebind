@@ -409,7 +409,7 @@ def test_java_runtime_supports_optional_value_flags(
     project_root = Path(__file__).resolve().parents[3]
     spec = SchemaCodec().load(project_root / 'examples' / 'fixture.apebind.yaml')
     optional_option = OptionSpec(
-        flags=('--label',),
+        flags=('--label=',),
         api_name='label',
         value_type=ValueType.STRING,
         value_optional=True,
@@ -469,8 +469,8 @@ public class Main {
     )
 
     lines = completed.stdout.splitlines()
-    assert lines[0] == '--label x'
-    assert lines[1] == '--label value x'
+    assert lines[0] == '--label= x'
+    assert lines[1] == '--label=value x'
 
 
 @pytest.mark.skipif(JAR is None, reason='jar tool is not installed')

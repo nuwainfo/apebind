@@ -5,8 +5,7 @@ import { mkdtemp, readFile, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pipeline } from 'node:stream/promises';
-
-
+{{ '' }}
 export class APEProcessResult {
   constructor(argv, returnCode, stdout, stderr) {
     this.argv = Object.freeze([...argv]);
@@ -17,7 +16,6 @@ export class APEProcessResult {
   }
 }
 
-
 export class APEEvent {
   constructor(name, data, raw, known) {
     this.name = name;
@@ -27,7 +25,6 @@ export class APEEvent {
     Object.freeze(this);
   }
 }
-
 
 export class APEProcessError extends Error {
   constructor(result) {
@@ -40,14 +37,12 @@ export class APEProcessError extends Error {
   }
 }
 
-
 export class APEEventError extends Error {
   constructor(message, options = {}) {
     super(message, options);
     this.name = 'APEEventError';
   }
 }
-
 
 export class APETimeoutError extends Error {
   constructor(argv, timeoutSeconds) {
@@ -57,7 +52,6 @@ export class APETimeoutError extends Error {
     this.timeoutSeconds = timeoutSeconds;
   }
 }
-
 
 function normalizeAPEReturnCode(returnCode) {
   if (
@@ -70,7 +64,6 @@ function normalizeAPEReturnCode(returnCode) {
 
   return returnCode;
 }
-
 
 function wslInteropGuidance(stderr) {
   if (!stderr.toLowerCase().includes('tlserror([0x6300])')) {
@@ -88,7 +81,6 @@ function wslInteropGuidance(stderr) {
   );
 }
 
-
 function isWSL2() {
   let version;
 
@@ -105,11 +97,9 @@ function isWSL2() {
   return true;
 }
 
-
 function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
-
 
 function collectStream(stream, capture = true) {
   if (!capture) {
@@ -121,14 +111,12 @@ function collectStream(stream, capture = true) {
   return () => Buffer.concat(chunks).toString('utf8');
 }
 
-
 function waitForExit(child) {
   return new Promise((resolve, reject) => {
     child.once('error', reject);
     child.once('exit', (code, signal) => resolve({ code, signal }));
   });
 }
-
 
 async function waitWithTimeout(promise, timeoutSeconds, onTimeout) {
   if (timeoutSeconds === null || timeoutSeconds === undefined) {
@@ -152,7 +140,6 @@ async function waitWithTimeout(promise, timeoutSeconds, onTimeout) {
   }
 }
 
-
 function extractField(value, fieldPath) {
   if (!fieldPath) {
     return value;
@@ -166,7 +153,6 @@ function extractField(value, fieldPath) {
 
   return current;
 }
-
 
 class RuntimeFiles {
   constructor(directory, paths) {
@@ -211,7 +197,6 @@ class RuntimeFiles {
     this.cleaned = true;
   }
 }
-
 
 class EventDecoder {
   constructor(config) {
@@ -320,7 +305,6 @@ class EventDecoder {
     return new APEEvent(eventType.name, data, raw, true);
   }
 }
-
 
 class JSONLFileEventChannel {
   constructor(path, config, isRunning) {
@@ -458,7 +442,6 @@ class JSONLFileEventChannel {
     }
   }
 }
-
 
 export class ProcessSession {
   constructor(
@@ -794,7 +777,6 @@ export class ProcessSession {
   }
 }
 
-
 export class APEClient {
   constructor(binaryPath, operations, runtime = {}) {
     this._binaryPath = binaryPath;
@@ -823,14 +805,22 @@ export class APEClient {
       return true;
     }
 
-    argv.push(option.primary_flag);
-
     if (value === true) {
+      argv.push(option.primary_flag);
       return true;
     }
 
-    argv.push(String(value));
+    this._appendOptionValue(argv, option.primary_flag, value);
     return true;
+  }
+
+  _appendOptionValue(argv, flag, value) {
+    if (flag.endsWith('=')) {
+      argv.push(`${flag}${value}`);
+      return;
+    }
+
+    argv.push(flag, String(value));
   }
 
   _runtimePath(option, runtimeFiles, operation) {
@@ -882,13 +872,13 @@ export class APEClient {
 
       if (option.multiple) {
         for (const item of this._multipleValues(value)) {
-          argv.push(option.primary_flag, String(item));
+          this._appendOptionValue(argv, option.primary_flag, item);
         }
 
         continue;
       }
 
-      argv.push(option.primary_flag, String(value));
+      this._appendOptionValue(argv, option.primary_flag, value);
     }
   }
 

@@ -286,7 +286,7 @@ const operation = {
     positionals: [],
     options: [{
       api_name: 'label',
-      primary_flag: '--label',
+      primary_flag: '--label=',
       boolean: false,
       required: false,
       multiple: false,
@@ -305,8 +305,8 @@ console.log(JSON.stringify({
     )
     assert json.loads(completed.stdout) == {
         'absent': [],
-        'flag': ['--label'],
-        'value': ['--label', 'value'],
+        'flag': ['--label='],
+        'value': ['--label=value'],
     }
 
 

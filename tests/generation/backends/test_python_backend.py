@@ -363,7 +363,7 @@ def test_generated_runtime_supports_optional_value_flags(
 ):
     fake_ape = make_fixture_ape(tmp_path, fixture_ape_path)
     optional_option = OptionSpec(
-        flags=('--label',),
+        flags=('--label=',),
         api_name='label',
         value_type=ValueType.STRING,
         value_optional=True,
@@ -406,13 +406,13 @@ def test_generated_runtime_supports_optional_value_flags(
             operation_metadata,
             {'text': 'x', 'label': True},
             None,
-        )[-2:] == ['--label', 'x']
+        )[-2:] == ['--label=', 'x']
         assert runtime_client._build_argv(
             operation_metadata,
             {'text': 'x', 'label': 'value'},
             None,
-        )[-3:] == ['--label', 'value', 'x']
-        assert '--label' not in runtime_client._build_argv(
+        )[-2:] == ['--label=value', 'x']
+        assert '--label=' not in runtime_client._build_argv(
             operation_metadata,
             {'text': 'x', 'label': None},
             None,

@@ -184,12 +184,12 @@ public final class APEClient {
                 return true;
             }
 
-            argv.add(flag);
-
             if (optionalValue.hasValue()) {
-                argv.add(stringify(optionalValue.value()));
+                appendOptionValue(argv, flag, optionalValue.value());
+                return true;
             }
 
+            argv.add(flag);
             return true;
         }
 
@@ -197,13 +197,23 @@ public final class APEClient {
             return true;
         }
 
-        argv.add(flag);
-
-        if (!Boolean.TRUE.equals(value)) {
-            argv.add(stringify(value));
+        if (Boolean.TRUE.equals(value)) {
+            argv.add(flag);
+            return true;
         }
 
+        appendOptionValue(argv, flag, value);
         return true;
+    }
+
+    private static void appendOptionValue(List<String> argv, String flag, Object value) {
+        if (flag.endsWith("=")) {
+            argv.add(flag + stringify(value));
+            return;
+        }
+
+        argv.add(flag);
+        argv.add(stringify(value));
     }
 
     private static RuntimePath runtimePath(
@@ -278,14 +288,12 @@ public final class APEClient {
 
             if (bool(option.get("multiple"))) {
                 for (Object item : multipleValues(value)) {
-                    argv.add(string(option.get("primary_flag")));
-                    argv.add(stringify(item));
+                    appendOptionValue(argv, string(option.get("primary_flag")), item);
                 }
                 continue;
             }
 
-            argv.add(string(option.get("primary_flag")));
-            argv.add(stringify(value));
+            appendOptionValue(argv, string(option.get("primary_flag")), value);
         }
     }
 

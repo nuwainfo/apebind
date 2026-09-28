@@ -809,13 +809,20 @@ class APEClient:
         if value is None or value is False:
             return True
 
-        argv.append(option['primary_flag'])
-
         if value is True:
+            argv.append(option['primary_flag'])
             return True
 
-        argv.append(str(value))
+        cls._append_option_value(argv, option['primary_flag'], value)
         return True
+
+    @staticmethod
+    def _append_option_value(argv: list[str], flag: str, value: Any) -> None:
+        if flag.endswith('='):
+            argv.append(f'{flag}{value}')
+            return
+
+        argv.extend([flag, str(value)])
 
     @staticmethod
     def _runtime_path(
@@ -873,11 +880,11 @@ class APEClient:
 
             if option['multiple']:
                 for item in cls._multiple_values(value):
-                    argv.extend([option['primary_flag'], str(item)])
+                    cls._append_option_value(argv, option['primary_flag'], item)
 
                 continue
 
-            argv.extend([option['primary_flag'], str(value)])
+            cls._append_option_value(argv, option['primary_flag'], value)
 
     @classmethod
     def _append_positionals(
