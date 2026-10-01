@@ -8,8 +8,4 @@ dist/
 .coverage
 htmlcov/
 cosmocc/
-ape/*
-!ape/LICENSES/
-!ape/LICENSES/**
-!ape/THIRD_PARTY_NOTICES.md
 tests/fixtures/ape_fixture.com

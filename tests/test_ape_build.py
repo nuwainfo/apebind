@@ -58,7 +58,7 @@ def test_prepare_ape_lib_copies_portable_runtime_dependencies(tmp_path: Path):
 
 def test_apebind_ape_can_bind_itself_repeatedly(tmp_path: Path):
     configured_ape = os.environ.get('APEBIND_SELF_APPLICATION_APE')
-    ape_path = Path(configured_ape) if configured_ape else PROJECT_ROOT / 'ape' / 'apebind.com'
+    ape_path = Path(configured_ape) if configured_ape else PROJECT_ROOT / 'dist' / 'apebind.com'
     if not ape_path.is_file():
         pytest.skip('APEBind APE is missing; run bash scripts/build_ape.sh first')
 

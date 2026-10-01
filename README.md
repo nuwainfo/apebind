@@ -64,37 +64,45 @@ python scripts/clean.py
 ## Build APEBind as an APE
 
 `scripts/build_ape.sh` packages APEBind itself as a self-contained
-`ape/apebind.com`. The repository includes the required `ape/python.com` and
-`ape/cosmofy.com`, so a checkout can run the prebuilt APE immediately. The
-same directory holds the generated `Lib/` tree and license notices for the
-bundled tools.
+`dist/apebind.com`. The script downloads the latest `python.com` release from
+[bear0330/python-ape](https://github.com/bear0330/python-ape) and the latest
+`pythoncosmofy.com` release from
+[bear0330/pythoncosmofy](https://github.com/bear0330/pythoncosmofy) into a
+temporary build directory and uses both to build `apebind.com`; neither
+download is kept around after the build finishes. See
+`THIRD_PARTY_NOTICES.md` for the licensing notices that apply to the embedded
+CPython/Cosmopolitan runtime.
 
 Run the script from a POSIX shell with an active Python environment that has
-APEBind's runtime dependencies installed. `PYTHON` selects that interpreter
-and defaults to `python`:
+APEBind's runtime dependencies installed and network access to GitHub.
+`PYTHON` selects that interpreter and defaults to `python`:
 
 ```bash
 PYTHON=python3 bash scripts/build_ape.sh
-./ape/apebind.com --help
+./dist/apebind.com --help
 ```
 
 The build copies APEBind, Click, Jinja2, PyYAML, attrs, cattrs, and their
 portable Python dependencies into `Lib/`; it deliberately omits platform
-extension modules before compiling the tree with the bundled Python APE.
+extension modules before compiling the tree with the downloaded Python APE.
+
+Note that `python scripts/build.py` clears `dist/` by default before building
+the wheel/sdist, so build `apebind.com` after that step (or pass `--no-clean`
+to `build.py`) if you want both artifacts in `dist/` at once.
 
 ## APEBind can bind itself, which is mostly useless and very fun
 
-`ape/apebind.com` is itself an APE CLI. That means it is also a perfectly valid
+`dist/apebind.com` is itself an APE CLI. That means it is also a perfectly valid
 input to APEBind. No special self-hosting path is required: APEBind can inspect
 its own help, emit a normal schema for itself, and generate a language binding
 that bundles another copy of `apebind.com`.
 
 ```bash
-./ape/apebind.com inspect ./ape/apebind.com -o apebind-self.apebind.yaml
-./ape/apebind.com validate apebind-self.apebind.yaml
-./ape/apebind.com generate \
+./dist/apebind.com inspect ./dist/apebind.com -o apebind-self.apebind.yaml
+./dist/apebind.com validate apebind-self.apebind.yaml
+./dist/apebind.com generate \
     apebind-self.apebind.yaml \
-    --ape ./ape/apebind.com \
+    --ape ./dist/apebind.com \
     --lang python \
     -o ./generated/apebind
 ```
@@ -108,7 +116,7 @@ import apebind
 
 result = apebind.generate(
     'apebind-self.apebind.yaml',
-    ape='./ape/apebind.com',
+    ape='./dist/apebind.com',
     lang='python',
     output='./generated/apebind-generation-two',
 )
@@ -133,11 +141,12 @@ be an executable CLI too. The repository has an integration test for this so the
 trick remains real rather than becoming a README-only claim.
 
 This is **self-application**, not full compiler self-hosting. Building
-`ape/apebind.com` still relies on the bundled Python APE and `cosmofy.com`; the
-interesting property here is that once `apebind.com` exists, APEBind's ordinary
-inspect/schema/generate pipeline can be applied to itself repeatedly.
+`dist/apebind.com` still relies on the downloaded Python APE and
+`pythoncosmofy.com`; the interesting property here is that once `apebind.com`
+exists, APEBind's ordinary inspect/schema/generate pipeline can be applied to
+itself repeatedly.
 
-## What v0.4.1 includes
+## What v0.4.2 includes
 
 - APE v0.1 header detection.
 - Recursive `--help` discovery for nested command trees.
@@ -332,13 +341,16 @@ Schema `snake_case` API names are projected to normal JavaScript `camelCase`; fo
 
 ### A fun example: use `python.com` from Node.js
 
-The repository also ships `ape/python.com`. `examples/python/python.discovered.apebind.yaml` records the raw help-import result, while `examples/python/python.apebind.yaml` is the reviewed schema used to generate a normal Node.js API around the portable interpreter:
+Download the latest `python.com` release from
+[bear0330/python-ape](https://github.com/bear0330/python-ape) (the same APE
+`scripts/build_ape.sh` fetches) and place it at `dist/python.com`.
+`examples/python/python.discovered.apebind.yaml` records the raw help-import result, while `examples/python/python.apebind.yaml` is the reviewed schema used to generate a normal Node.js API around the portable interpreter:
 
 ```bash
-./ape/apebind.com validate ./examples/python/python.apebind.yaml
+./dist/apebind.com validate ./examples/python/python.apebind.yaml
 
-./ape/apebind.com generate ./examples/python/python.apebind.yaml \
-    --ape ./ape/python.com \
+./dist/apebind.com generate ./examples/python/python.apebind.yaml \
+    --ape ./dist/python.com \
     --lang node \
     -o ./generated/python-ape
 

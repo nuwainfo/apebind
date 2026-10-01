@@ -12,7 +12,7 @@ def test_version_command():
     result = CliRunner().invoke(main, ['--version'])
 
     assert result.exit_code == 0
-    assert '0.4.1' in result.output
+    assert '0.4.2' in result.output
 
 
 def test_validate_command_uses_click_boundary(tmp_path, inspected_spec):
