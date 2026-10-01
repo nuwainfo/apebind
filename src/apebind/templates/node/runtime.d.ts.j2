@@ -62,6 +62,7 @@ export class ProcessSession<TEvents extends APEEventMap = Record<string, unknown
 export interface RawOptions {
   persistent?: boolean;
   timeoutSeconds?: number | null;
+  input?: string | Uint8Array | null;
 }
 
 export class APEClient {
@@ -69,6 +70,7 @@ export class APEClient {
     binaryPath: string,
     operations: Record<string, unknown>,
     runtime?: Record<string, unknown>,
+    environment?: Readonly<Record<string, string | undefined>>,
   );
   invoke(operationName: string, values?: Record<string, unknown>): Promise<unknown>;
   raw(

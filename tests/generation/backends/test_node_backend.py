@@ -101,6 +101,27 @@ console.log(JSON.stringify(values));
     }
 
 
+def test_node_runtime_sends_raw_oneshot_input(
+    tmp_path: Path,
+    fixture_ape_path: Path,
+):
+    output_directory = generate_fixture(tmp_path, fixture_ape_path)
+    completed = run_node(
+        output_directory,
+        """
+import { APEClient } from './src/_runtime.js';
+const client = new APEClient(process.execPath, {});
+const result = await client.raw(
+  ['-e', 'process.stdin.pipe(process.stdout)'],
+  { input: 'raw input' },
+);
+console.log(result.stdout);
+""",
+    )
+
+    assert completed.stdout.strip() == 'raw input'
+
+
 def test_node_runtime_streams_stdout_without_capturing_and_handles_early_stdin_exit(
     tmp_path: Path,
     fixture_ape_path: Path,
@@ -211,6 +232,30 @@ console.log(client._environment().APEBIND_TEST_SECRET === undefined);
         environment,
     )
     assert completed.stdout.strip() == 'true'
+
+
+def test_node_backend_creates_client_with_private_environment_overrides(
+    tmp_path: Path,
+    fixture_ape_path: Path,
+):
+    output_directory = generate_fixture(tmp_path, fixture_ape_path)
+    completed = run_node(
+        output_directory,
+        """
+import { createClient } from './src/index.js';
+const client = createClient({ environment: { APEBIND_TEST_CLIENT: 'enabled' } });
+const environment = client._environment();
+console.log(JSON.stringify({
+  client: environment.APEBIND_TEST_CLIENT,
+  process: process.env.APEBIND_TEST_CLIENT ?? null,
+}));
+""",
+    )
+
+    assert json.loads(completed.stdout) == {
+        'client': 'enabled',
+        'process': None,
+    }
 
 
 @pytest.mark.skipif(NPM is None, reason='npm is not installed')

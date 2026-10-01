@@ -5,6 +5,12 @@ import type {
   RawOptions,
 } from './_runtime.js';
 
+export interface ClientOptions {
+  environment?: Readonly<Record<string, string | undefined>>;
+}
+
+export function createClient(options?: ClientOptions): import('./_runtime.js').APEClient;
+
 {% for operation in operations %}
 {% if operation.events %}
 {% for event_type in operation.events.types %}export interface {{ event_type.type_name }} {

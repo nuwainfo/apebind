@@ -4,6 +4,7 @@ import { chmodSync, readFileSync, statSync } from 'node:fs';
 import { mkdtemp, readFile, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 {{ '' }}
 export class APEProcessResult {
@@ -778,10 +779,11 @@ export class ProcessSession {
 }
 
 export class APEClient {
-  constructor(binaryPath, operations, runtime = {}) {
+  constructor(binaryPath, operations, runtime = {}, environment = {}) {
     this._binaryPath = binaryPath;
     this._operations = operations;
     this._runtime = runtime;
+    this._environmentOverrides = Object.freeze({ ...environment });
   }
 
   _multipleValues(value) {
@@ -933,6 +935,15 @@ export class APEClient {
       delete environment[variableName];
     }
 
+    for (const [variableName, value] of Object.entries(this._environmentOverrides)) {
+      if (value === undefined) {
+        delete environment[variableName];
+        continue;
+      }
+
+      environment[variableName] = value;
+    }
+
     return environment;
   }
 
@@ -964,11 +975,14 @@ export class APEClient {
     });
   }
 
-  async _runCommand(argv, timeoutSeconds = null) {
-    const child = this._spawn(argv);
+  async _runCommand(argv, timeoutSeconds = null, input = null) {
+    const child = this._spawn(argv, input);
     const stdoutText = collectStream(child.stdout);
     const stderrText = collectStream(child.stderr);
     const exitPromise = waitForExit(child);
+    const inputDone = input === null
+      ? null
+      : pipeline(Readable.from([input]), child.stdin);
     let timedOut = false;
     const status = await waitWithTimeout(
       exitPromise,
@@ -985,6 +999,11 @@ export class APEClient {
     }
 
     const completed = await exitPromise;
+
+    if (inputDone !== null) {
+      await inputDone;
+    }
+
     const result = new APEProcessResult(
       argv,
       normalizeAPEReturnCode(completed.code ?? 1),
@@ -1172,12 +1191,19 @@ export class APEClient {
     return this._runOneshot(argv, runtimeFiles, operation);
   }
 
-  async raw(arguments_, { persistent = false, timeoutSeconds = null } = {}) {
+  async raw(
+    arguments_,
+    { persistent = false, timeoutSeconds = null, input = null } = {},
+  ) {
     const argv = arguments_.map((value) => String(value));
     if (persistent) {
+      if (input !== null) {
+        throw new TypeError('raw persistent sessions do not accept input');
+      }
+
       return this._startPersistent(argv, null);
     }
 
-    return this._runCommand(argv, timeoutSeconds);
+    return this._runCommand(argv, timeoutSeconds, input);
   }
 }

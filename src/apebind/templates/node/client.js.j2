@@ -5,11 +5,17 @@ import { APEClient } from './_runtime.js';
 {{ '' }}
 const OPERATIONS = {{ operations_json }};
 const RUNTIME = {{ runtime_json }};
-const CLIENT = new APEClient(
-  fileURLToPath(new URL('./bin/{{ binary_name }}', import.meta.url)),
-  OPERATIONS,
-  RUNTIME,
-);
+
+export function createClient({ environment = {} } = {}) {
+  return new APEClient(
+    fileURLToPath(new URL('./bin/{{ binary_name }}', import.meta.url)),
+    OPERATIONS,
+    RUNTIME,
+    environment,
+  );
+}
+
+const CLIENT = createClient();
 {% for operation in operations %}
 export async function {{ operation.name }}(parameters = {}) {
   return CLIENT.invoke('{{ operation.name }}', parameters);
