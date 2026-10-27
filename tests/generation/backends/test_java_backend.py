@@ -170,10 +170,11 @@ public class Main {
         var serve = FixturebindBinding.ServeParameters.builder()
             .message("ready")
             .build();
-        String echoValue = FixturebindBinding.echo(echo);
-        Object jsonValue = FixturebindBinding.jsonValue(json);
-        String raw = FixturebindBinding.raw(java.util.List.of("echo", "raw")).stdout().trim();
-        var session = FixturebindBinding.serve(serve);
+        var binding = FixturebindBinding.defaults();
+        String echoValue = binding.echo(echo);
+        Object jsonValue = binding.jsonValue(json);
+        String raw = binding.raw(java.util.List.of("echo", "raw")).stdout().trim();
+        var session = binding.serve(serve);
         var exited = new AtomicBoolean();
         session.onExit(() -> exited.set(true));
         String link = String.valueOf(session.result());
@@ -262,7 +263,7 @@ public class Main {
             .message("stream")
             .build();
         var source = new TrackingInputStream(new byte[] {0, 1, 2, 3});
-        var session = FixturebindBinding.serve(parameters, source);
+        var session = FixturebindBinding.defaults().serve(parameters, source);
         long deadline = System.nanoTime() + 2_000_000_000L;
 
         while (source.bytesRead < 4 && System.nanoTime() < deadline) {
@@ -275,7 +276,7 @@ public class Main {
         }
 
         try {
-            FixturebindBinding.serve(parameters, new FailingInputStream());
+            FixturebindBinding.defaults().serve(parameters, new FailingInputStream());
             throw new AssertionError("Persistent operation hid source failure");
         } catch (IllegalStateException error) {
             if (error.getCause() == null || !error.getCause().getMessage().contains("source failure")) {
@@ -312,13 +313,13 @@ public class Main {
         boolean processError = false;
         boolean timeoutError = false;
         try {
-            FixturebindBinding.raw(java.util.List.of("fail", "--code", "9"));
+            FixturebindBinding.defaults().raw(java.util.List.of("fail", "--code", "9"));
         } catch (APEProcessException error) {
             processError = error.result().returnCode() == 9
                 && error.result().stderr().contains("requested failure");
         }
         try {
-            FixturebindBinding.raw(
+            FixturebindBinding.defaults().raw(
                 java.util.List.of("serve", "--json", "timeout-result.json"),
                 0.05
             );
@@ -457,7 +458,7 @@ public class Main {
         } else {
             builder.label("value");
         }
-        return FixturebindBinding.echo(builder.build());
+        return FixturebindBinding.defaults().echo(builder.build());
     }
 
     public static void main(String[] args) {
@@ -505,7 +506,7 @@ public class Consumer {
         var parameters = FixturebindBinding.EchoParameters.builder()
             .text("installed")
             .build();
-        System.out.println(FixturebindBinding.echo(parameters));
+        System.out.println(FixturebindBinding.defaults().echo(parameters));
     }
 }
 ''',

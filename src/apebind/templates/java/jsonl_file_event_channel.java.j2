@@ -133,7 +133,7 @@ final class JSONLFileEventChannel {
         String text;
 
         try {
-            text = Files.readString(path, StandardCharsets.UTF_8);
+            text = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
         } catch (IOException caught) {
             throw new APEEventException("Failed to read APE JSONL event file", caught);
         }

@@ -10,53 +10,88 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class {{ binding_class }} {
+    private static final String BINARY_NAME = "{{ binary_name }}";
     private static final String OPERATIONS_JSON = """
 {{ operations_json | indent(8, true) }}
         """;
     private static final String RUNTIME_JSON = """
 {{ runtime_json | indent(8, true) }}
         """;
-    private static final APEClient CLIENT = new APEClient(
-        BinaryResource.resolve("{{ binary_name }}"),
-        APEClient.parseObject(OPERATIONS_JSON),
-        APEClient.parseObject(RUNTIME_JSON)
-    );
+    private static volatile {{ binding_class }} defaultBinding;
 
-    private {{ binding_class }}() {}
+    private final APEClient client;
+
+    private {{ binding_class }}(APEClient client) {
+        this.client = client;
+    }
+
+    /** The binding backed by {@link APERuntime#defaults()}: the bundled APE, extracted on first use. */
+    public static {{ binding_class }} defaults() {
+        {{ binding_class }} binding = defaultBinding;
+
+        if (binding == null) {
+            synchronized ({{ binding_class }}.class) {
+                binding = defaultBinding;
+
+                if (binding == null) {
+                    binding = create(APERuntime.defaults());
+                    defaultBinding = binding;
+                }
+            }
+        }
+
+        return binding;
+    }
+
+    /** A binding that launches the APE as described by {@code runtime}. */
+    public static {{ binding_class }} create(APERuntime runtime) {
+        Objects.requireNonNull(runtime, "runtime");
+
+        return new {{ binding_class }}(new APEClient(
+            BINARY_NAME,
+            runtime,
+            APEClient.parseObject(OPERATIONS_JSON),
+            APEClient.parseObject(RUNTIME_JSON)
+        ));
+    }
+
+    public APERuntime runtime() {
+        return client.runtime();
+    }
 
 {% for operation in operations %}
 {% if operation.parameters %}
-    public static {{ operation.result_type }} {{ operation.name }}({{ operation.type_name }} parameters) {
+    public {{ operation.result_type }} {{ operation.name }}({{ operation.type_name }} parameters) {
         Objects.requireNonNull(parameters, "parameters");
 
-        return ({{ operation.result_type }}) CLIENT.invoke(
+        return {% if operation.result_type != 'Object' %}({{ operation.result_type }}) {% endif %}client.invoke(
             "{{ operation.source_name }}",
             parameters.toValues()
         );
     }
 {% if operation.execution == 'persistent' %}
 
-    public static {{ operation.result_type }} {{ operation.name }}(
+    public {{ operation.result_type }} {{ operation.name }}(
         {{ operation.type_name }} parameters,
         InputStream stdinSource
     ) {
         Objects.requireNonNull(parameters, "parameters");
         Objects.requireNonNull(stdinSource, "stdinSource");
 
-        return ({{ operation.result_type }}) CLIENT.invoke(
+        return {% if operation.result_type != 'Object' %}({{ operation.result_type }}) {% endif %}client.invoke(
             "{{ operation.source_name }}",
             parameters.toValues(),
             stdinSource
         );
     }
 
-    public static {{ operation.result_type }} {{ operation.name }}(
+    public {{ operation.result_type }} {{ operation.name }}(
         {{ operation.type_name }} parameters,
         boolean captureStdout
     ) {
         Objects.requireNonNull(parameters, "parameters");
 
-        return ({{ operation.result_type }}) CLIENT.invoke(
+        return {% if operation.result_type != 'Object' %}({{ operation.result_type }}) {% endif %}client.invoke(
             "{{ operation.source_name }}",
             parameters.toValues(),
             null,
@@ -65,8 +100,8 @@ public final class {{ binding_class }} {
     }
 {% endif -%}
 {% else %}
-    public static {{ operation.result_type }} {{ operation.name }}() {
-        return ({{ operation.result_type }}) CLIENT.invoke(
+    public {{ operation.result_type }} {{ operation.name }}() {
+        return {% if operation.result_type != 'Object' %}({{ operation.result_type }}) {% endif %}client.invoke(
             "{{ operation.source_name }}",
             Map.of()
         );
@@ -129,15 +164,15 @@ public final class {{ binding_class }} {
 {% endif -%}
 {% endfor -%}
 
-    public static APEProcessResult raw(List<?> arguments) {
-        return CLIENT.raw(arguments);
+    public APEProcessResult raw(List<?> arguments) {
+        return client.raw(arguments);
     }
 
-    public static APEProcessResult raw(List<?> arguments, double timeoutSeconds) {
-        return CLIENT.raw(arguments, timeoutSeconds);
+    public APEProcessResult raw(List<?> arguments, double timeoutSeconds) {
+        return client.raw(arguments, timeoutSeconds);
     }
 
-    public static ProcessSession rawPersistent(List<?> arguments) {
-        return CLIENT.rawPersistent(arguments);
+    public ProcessSession rawPersistent(List<?> arguments) {
+        return client.rawPersistent(arguments);
     }
 }

@@ -8,7 +8,14 @@ a temporary executable file on first use.
 
 ```java
 import {{ package_name }}.{{ binding_class }};
+
+var binding = {{ binding_class }}.defaults();
 ```
+
+`{{ binding_class }}.create(APERuntime)` launches the APE differently: from an explicit
+path, through a launcher prefix, without the platform shell, in another working
+directory, or with extra environment variables. The runtime uses only APIs available
+on Android API 26.
 
 Build with Maven:
 

@@ -146,7 +146,7 @@ This is **self-application**, not full compiler self-hosting. Building
 exists, APEBind's ordinary inspect/schema/generate pipeline can be applied to
 itself repeatedly.
 
-## What v0.4.2 includes
+## What v0.5.2 includes
 
 - APE v0.1 header detection.
 - Recursive `--help` discovery for nested command trees.
@@ -385,21 +385,34 @@ apebind generate ./examples/fixture.apebind.yaml \
     -o ./generated/fixturebind-java
 ```
 
-The APE is bundled as a JAR resource and extracted to a temporary executable path on first use. Generated APIs use normal camelCase names and builder parameter objects:
+The APE is bundled as a JAR resource and extracted to a temporary executable path on first use. A binding is an instance: `defaults()` is the bundled APE launched through the platform shell, and `create(APERuntime)` describes any other launch. Generated APIs use normal camelCase names and builder parameter objects:
 
 ```java
 import apebind.generated.fixturebind.FixturebindBinding;
 
+var binding = FixturebindBinding.defaults();
 var parameters = FixturebindBinding.EchoParameters.builder()
     .text("hello")
     .text("world")
     .upper(true)
     .build();
 
-System.out.println(FixturebindBinding.echo(parameters));
+System.out.println(binding.echo(parameters));
 ```
 
-Persistent operations return `ProcessSession`, which implements `AutoCloseable`, so Java callers can use try-with-resources. Event-capable sessions expose `on(...)`, `eventHistory()`, and `done()`. The `jvm` language name is an alias of `java`.
+`APERuntime` carries the launch settings a host may need to override: an explicit `binary` path instead of the bundled resource, a `launcher` prefix such as an `ape` loader, `shellWrapper(false)` to exec the APE directly, a `workingDirectory`, and `environment` overrides applied after the schema's `env_unset`. Android apps, for example, run the APE from `nativeLibraryDir` without `/bin/sh`:
+
+```java
+var runtime = APERuntime.builder()
+    .binary(Paths.get(nativeLibraryDir, "libfixture.so"))
+    .shellWrapper(false)
+    .workingDirectory(filesDir.toPath())
+    .environment("TMPDIR", tmpDir)
+    .build();
+var binding = FixturebindBinding.create(runtime);
+```
+
+Persistent operations return `ProcessSession`, which implements `AutoCloseable`, so Java callers can use try-with-resources. Sessions deliver output as it arrives through `onStdoutLine(...)`, `onStderrLine(...)` and `onStdoutPrompt(...)` (text the process leaves unterminated while it waits on stdin), and a JSON-file `result()` is awaited lazily on first use. Event-capable sessions expose `on(...)`, `eventHistory()`, and `done()`. The generated runtime uses only APIs available on Android API 26 (the Java 9-11 helpers it needs are on D8's backport list; records are desugared). The `jvm` language name is an alias of `java`.
 
 ## Architecture and schema
 

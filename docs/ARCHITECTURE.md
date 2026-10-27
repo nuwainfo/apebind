@@ -53,6 +53,13 @@ programmer-facing API and may choose a different name or lifecycle for the same
 command path. Application vocabulary—such as what a `progress` event means—is
 specified by the reviewed schema, never inferred by the generic runtime.
 
+How the APE process is launched is a separate, host-owned value: the Java backend
+exposes it as `APERuntime` (explicit binary path or bundled resource, launcher prefix,
+shell wrapper on or off, working directory, environment overrides). Bindings are
+instances created from a runtime; `defaults()` is the bundled APE launched through the
+platform shell. The generated Java runtime avoids APIs missing on Android API 26 and
+resolves `ProcessHandle` reflectively, so the same classes run inside an Android app.
+
 The current backends are Python, Node.js, and Java. Their projects and runtimes
 use only the target platform's standard facilities: Python standard library,
 `node:*` modules, and Java 17 respectively.

@@ -2,8 +2,10 @@
 package {{ package_name }};
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public final class Json {
@@ -36,6 +38,115 @@ public final class Json {
         }
 
         return (List<Object>) value;
+    }
+
+    /**
+     * Compact JSON text for the value shapes {@link #parse} produces: maps with string keys,
+     * collections, strings, booleans, numbers and null.
+     */
+    public static String stringify(Object value) {
+        StringBuilder out = new StringBuilder();
+        write(value, out);
+
+        return out.toString();
+    }
+
+    private static void write(Object value, StringBuilder out) {
+        if (value == null) {
+            out.append("null");
+        } else if (value instanceof String text) {
+            writeString(text, out);
+        } else if (value instanceof Boolean flag) {
+            out.append(flag.booleanValue());
+        } else if (value instanceof Number number) {
+            writeNumber(number, out);
+        } else if (value instanceof Map<?, ?> map) {
+            writeObject(map, out);
+        } else if (value instanceof Collection<?> items) {
+            writeArray(items, out);
+        } else {
+            throw new IllegalArgumentException("Cannot serialize " + value.getClass().getName() + " to JSON");
+        }
+    }
+
+    private static void writeObject(Map<?, ?> map, StringBuilder out) {
+        out.append('{');
+        boolean first = true;
+
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            if (!(entry.getKey() instanceof String key)) {
+                throw new IllegalArgumentException("JSON object keys must be strings");
+            }
+
+            if (!first) {
+                out.append(',');
+            }
+
+            first = false;
+            writeString(key, out);
+            out.append(':');
+            write(entry.getValue(), out);
+        }
+
+        out.append('}');
+    }
+
+    private static void writeArray(Collection<?> items, StringBuilder out) {
+        out.append('[');
+        boolean first = true;
+
+        for (Object item : items) {
+            if (!first) {
+                out.append(',');
+            }
+
+            first = false;
+            write(item, out);
+        }
+
+        out.append(']');
+    }
+
+    private static void writeNumber(Number number, StringBuilder out) {
+        if (number instanceof Double || number instanceof Float) {
+            double value = number.doubleValue();
+            if (Double.isNaN(value) || Double.isInfinite(value)) {
+                throw new IllegalArgumentException("JSON cannot represent " + value);
+            }
+
+            out.append(value);
+        } else if (number instanceof Integer || number instanceof Long
+            || number instanceof Short || number instanceof Byte) {
+            out.append(number.longValue());
+        } else {
+            out.append(number);
+        }
+    }
+
+    private static void writeString(String text, StringBuilder out) {
+        out.append('"');
+
+        for (int index = 0; index < text.length(); index++) {
+            char value = text.charAt(index);
+            switch (value) {
+                case '"' -> out.append("\\\"");
+                case '\\' -> out.append("\\\\");
+                case '\b' -> out.append("\\b");
+                case '\f' -> out.append("\\f");
+                case '\n' -> out.append("\\n");
+                case '\r' -> out.append("\\r");
+                case '\t' -> out.append("\\t");
+                default -> {
+                    if (value < 0x20) {
+                        out.append(String.format(Locale.ROOT, "\\u%04x", (int) value));
+                    } else {
+                        out.append(value);
+                    }
+                }
+            }
+        }
+
+        out.append('"');
     }
 
     private static final class Parser {
@@ -215,7 +326,13 @@ public final class Json {
 
             String number = text.substring(start, index);
             try {
-                return floatingPoint ? Double.parseDouble(number) : Long.parseLong(number);
+                // Branches stay boxed on purpose: a primitive conditional would promote
+                // every integer to double.
+                if (floatingPoint) {
+                    return Double.valueOf(number);
+                }
+
+                return Long.valueOf(number);
             } catch (NumberFormatException error) {
                 throw new IllegalArgumentException("Invalid JSON number: " + number, error);
             }

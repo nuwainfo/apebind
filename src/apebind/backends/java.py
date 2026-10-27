@@ -307,6 +307,8 @@ class JavaGenerator(TemplateLanguageBackend):
             ('ape_event_exception.java.j2', 'APEEventException.java'),
             ('jsonl_file_event_channel.java.j2', 'JSONLFileEventChannel.java'),
             ('optional_value.java.j2', 'OptionalValue.java'),
+            ('ape_runtime.java.j2', 'APERuntime.java'),
+            ('processes.java.j2', 'Processes.java'),
             ('process_session.java.j2', 'ProcessSession.java'),
             ('ape_client.java.j2', 'APEClient.java'),
             ('binary_resource.java.j2', 'BinaryResource.java'),

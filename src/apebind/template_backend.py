@@ -44,7 +44,7 @@ class TemplateLanguageBackend(LanguageBackend):
         template_path = f'{self._template_directory}/{template_name}'
         rendered = self._templates.get_template(template_path).render(**context)
 
-        output_path.write_text(rendered, encoding='utf-8')
+        output_path.write_text(rendered, encoding='utf-8', newline='\n')
 
     @staticmethod
     def _copy_ape(ape_path: Path, binary_path: Path) -> None:
